@@ -21,4 +21,5 @@ public class DemoMarvelApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DemoMarvelApplication.class, args);
 	}
+	
 }
