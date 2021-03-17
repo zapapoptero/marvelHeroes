@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.marvelheroes.demoMarvel.controller.impl;
 
 
@@ -29,20 +26,27 @@ import com.marvelheroes.demoMarvel.persistence.vo.SuperHeroVO;
 import com.marvelheroes.demoMarvel.service.SuperHeroService;
 
 /**
- * @author eduardo
+ * The Class SuperHeroControllerImplTest.
  *
+ * @author eduardo
  */
 @RunWith(MockitoJUnitRunner.class)  
 public class SuperHeroControllerImplTest {
 
+	/** The super hero controller impl. */
 	@InjectMocks
 	private SuperHeroControllerImpl superHeroControllerImpl;
 	
+	/** The super hero service. */
 	@Mock
 	private SuperHeroService superHeroService;
 	
+	/** The valid super hero. */
 	private SuperHeroVO validSuperHero;
 
+	/**
+	 * Inits the mocks.
+	 */
 	@Before
 	public void initMocks() {
 		validSuperHero.setId(1L);
@@ -50,6 +54,12 @@ public class SuperHeroControllerImplTest {
 		validSuperHero.setNombreReal("Bruce banner");
 		validSuperHero.setFuerza(2.0);
 			}
+	
+	/**
+	 * Gets the super heros.
+	 *
+	 * @return the super heros
+	 */
 	@Test
 	public void getSuperHeros() {	
 		superHeroControllerImpl.deleteHeroById(Mockito.anyLong());
@@ -57,6 +67,11 @@ public class SuperHeroControllerImplTest {
 		Mockito.verify(superHeroService,times(1)).deleteById(Mockito.anyLong());
 	}
 	
+	/**
+	 * Test update correct.
+	 *
+	 * @throws SuperHeroMapperException the super hero mapper exception
+	 */
 	@Test
 	public void testUpdateCorrect() throws SuperHeroMapperException {	
 		List<SuperHeroVO> superHeroVO = new ArrayList();
@@ -66,6 +81,9 @@ public class SuperHeroControllerImplTest {
 		assertEquals(superHeroControllerImpl.getSuperHeros(), superHeroVO);
 	}
 	
+	/**
+	 * Test update throw.
+	 */
 	@Test(expected = ResponseStatusException.class)
 	public void testUpdateThrow() {	
 		validSuperHero.setId(null);

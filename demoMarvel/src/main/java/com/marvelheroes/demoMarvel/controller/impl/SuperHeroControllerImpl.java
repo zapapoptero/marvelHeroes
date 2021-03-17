@@ -135,6 +135,7 @@ public class SuperHeroControllerImpl implements SuperHeroController {
 		try {
 			superHeroService.updateHero(superHeroVO);
 		} catch (SuperHeroException e) {
+			LOG_ERROR.error("Error updating hero with id {}",superHeroVO.getId());
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 
