@@ -109,23 +109,4 @@ public class SuperHeroServiceImpl implements SuperHeroService {
 		}
 	}
 
-	/**
-	 * Delete hero.
-	 *
-	 * @param superHeroVO the super hero VO
-	 * @throws SuperHeroException the super hero exception
-	 */
-	@Override
-	public void deleteHero(SuperHeroVO superHeroVO) throws SuperHeroException {
-		SuperHero superHero = superHeroMapper.classToEntity(superHeroVO);
-		if (superHeroRepository.existsById(superHero.getId())) {
-			LOG.info("super hero with id {} will be deleted", superHero.getId());
-			superHeroRepository.delete(superHero);
-		} else {
-			LOG_ERROR.error("Error superhero doenst exist in database");
-			throw new SuperHeroException(SuperHeroErrorMessage.ERROR_NONE_HERO_ID);
-		}
-
-	}
-
 }

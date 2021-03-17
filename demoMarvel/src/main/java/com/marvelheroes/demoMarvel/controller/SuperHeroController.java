@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.marvelheroes.demoMarvel.persistence.vo.SuperHeroVO;
@@ -22,7 +23,7 @@ public interface SuperHeroController {
 	 *
 	 * @return the super heros
 	 */
-	@GetMapping(value = "/getSuperHeros", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping
 	List<SuperHeroVO> getSuperHeros();
 
 	/**
@@ -31,7 +32,7 @@ public interface SuperHeroController {
 	 * @param id the id
 	 * @return the super hero by id
 	 */
-	@GetMapping(value = "/getSuperHero/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	SuperHeroVO getSuperHeroById(@PathVariable(value = "id", required = true) Long id);
 
 	/**
@@ -40,15 +41,15 @@ public interface SuperHeroController {
 	 * @param value the value
 	 * @return the super hero by name contains
 	 */
-	@GetMapping(value = "/getSuperHeroByNameContains/{value}", produces = MediaType.APPLICATION_JSON_VALUE)
-	List<SuperHeroVO> getSuperHeroByNameContains(@PathVariable(value = "value", required = true) String value);
+	@GetMapping(value = "/getSuperHeroByNameContains", produces = MediaType.APPLICATION_JSON_VALUE)
+	List<SuperHeroVO> getSuperHeroByNameContains(@RequestParam("value") String value);
 
 	/**
 	 * Update hero.
 	 *
 	 * @param superHeroVO the super hero VO
 	 */
-	@PutMapping(value = "/updateHero")
+	@PutMapping
 	void updateHero(@RequestBody SuperHeroVO superHeroVO);
 
 	/**
@@ -56,14 +57,7 @@ public interface SuperHeroController {
 	 *
 	 * @param id the id
 	 */
-	@DeleteMapping(value = "/deleteHero/{id}")
+	@DeleteMapping(value = "/{id}")
 	void deleteHeroById(@PathVariable(value = "id", required = true) Long id);
 
-	/**
-	 * Delete hero.
-	 *
-	 * @param superHeroVO the super hero VO
-	 */
-	@DeleteMapping(value = "/deleteHero")
-	void deleteHero(@RequestBody SuperHeroVO superHeroVO);
 }

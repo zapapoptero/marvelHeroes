@@ -15,10 +15,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.marvelheroes.demoMarvel.anotation.TimerMethods;
 import com.marvelheroes.demoMarvel.controller.SuperHeroController;
 import com.marvelheroes.demoMarvel.exception.SuperHeroErrorMessage;
 import com.marvelheroes.demoMarvel.exception.SuperHeroException;
@@ -27,7 +30,6 @@ import com.marvelheroes.demoMarvel.mapper.SuperHeroMapper;
 import com.marvelheroes.demoMarvel.persistence.vo.SuperHeroVO;
 import com.marvelheroes.demoMarvel.service.SuperHeroService;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SuperHeroControllerImpl.
  *
@@ -41,7 +43,6 @@ public class SuperHeroControllerImpl implements SuperHeroController {
 
 	/** The Constant LOG. */
 	private static final Logger LOG = LoggerFactory.getLogger(SuperHeroControllerImpl.class);
-
 	/** The super hero service. */
 	@Autowired
 	private SuperHeroService superHeroService;
@@ -51,7 +52,8 @@ public class SuperHeroControllerImpl implements SuperHeroController {
 	 *
 	 * @return the super heros
 	 */
-	@GetMapping(value = "/getSuperHeros", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping
+	@TimerMethods
 	public List<SuperHeroVO> getSuperHeros() {
 		LOG.info("We will call superHeroService.getSuperHeros");
 		List<SuperHeroVO> listSuperHerosList = new ArrayList();
@@ -76,8 +78,9 @@ public class SuperHeroControllerImpl implements SuperHeroController {
 	 * @param id the id
 	 * @return the super hero by id
 	 */
-	@GetMapping(value = "/getSuperHero/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	@Cacheable(cacheNames="ids",condition="#id > 1")
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@TimerMethods
+	@Cacheable(cacheNames = "ids", condition = "#id > 1")
 	public SuperHeroVO getSuperHeroById(@PathVariable(value = "id", required = true) Long id) {
 		LOG.info("We will call superHeroService.getSuperHeroById");
 		try {
@@ -95,8 +98,9 @@ public class SuperHeroControllerImpl implements SuperHeroController {
 	 * @return the super hero by name contains
 	 */
 	@GetMapping(value = "/getSuperHeroByNameContains/{value}", produces = MediaType.APPLICATION_JSON_VALUE)
-	@Cacheable(cacheNames="values")
-	public List<SuperHeroVO> getSuperHeroByNameContains(@PathVariable(value = "value", required = true) String value) {
+	@TimerMethods
+	@Cacheable(cacheNames = "values")
+	public List<SuperHeroVO> getSuperHeroByNameContains(@RequestParam("value") String value) {
 		LOG.info("We will call superHeroService.getSuperHeroByNameContains");
 		List<SuperHeroVO> listSuperHerosList = new ArrayList();
 		try {
@@ -120,9 +124,10 @@ public class SuperHeroControllerImpl implements SuperHeroController {
 	 * @param superHeroVO the super hero VO
 	 */
 	@Override
-	@PutMapping(value = "/updateHero")
-	@CacheEvict(cacheNames={"ids","values"}, allEntries=true)
-	public void updateHero(SuperHeroVO superHeroVO) {
+	@PutMapping
+	@TimerMethods
+	@CacheEvict(cacheNames = { "ids", "values" }, allEntries = true)
+	public void updateHero(@RequestBody SuperHeroVO superHeroVO) {
 		if (null == superHeroVO || null == superHeroVO.getId()) {
 			LOG_ERROR.error("Error we dont have any super hero in database");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, SuperHeroErrorMessage.ERROR_ID_NULL);
@@ -141,30 +146,12 @@ public class SuperHeroControllerImpl implements SuperHeroController {
 	 * @param id the id
 	 */
 	@Override
-	@DeleteMapping(value = "/deleteHero/{id}")
-	@CacheEvict(cacheNames="ids", allEntries=true)
-	public void deleteHeroById(Long id) {
+	@DeleteMapping(value = "/{id}")
+	@TimerMethods
+	@CacheEvict(cacheNames = "ids", allEntries = true)
+	public void deleteHeroById(@PathVariable Long id) {
 		LOG.info("We will call superHeroService.deleteById");
 		superHeroService.deleteById(id);
-	}
 
-	/**
-	 * Delete hero.
-	 *
-	 * @param superHeroVO the super hero VO
-	 */
-	@Override
-	@DeleteMapping(value = "/deleteHero")
-	@CacheEvict(cacheNames="ids", allEntries=true)
-	public void deleteHero(SuperHeroVO superHeroVO) {
-		if (null == superHeroVO || null == superHeroVO.getId()) {
-			LOG_ERROR.error("Error we dont have any super hero in database");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, SuperHeroErrorMessage.ERROR_ID_NULL);
-		}
-		try {
-			superHeroService.deleteHero(superHeroVO);
-		} catch (SuperHeroException e) {
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-		}
 	}
 }

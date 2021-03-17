@@ -53,11 +53,4 @@ public interface SuperHeroService {
 	 * @param id the id
 	 */
 	void deleteById(Long id);
-
-	/**
-	 * Delete hero.
-	 *
-	 * @param superHeroVO the super hero VO
-	 */
-	void deleteHero(SuperHeroVO superHeroVO) throws SuperHeroException;
 }

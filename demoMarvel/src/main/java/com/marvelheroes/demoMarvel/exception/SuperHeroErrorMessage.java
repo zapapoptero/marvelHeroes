@@ -1,9 +1,5 @@
-/**
- * 
- */
 package com.marvelheroes.demoMarvel.exception;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SuperHeroErrorMessage.
  *

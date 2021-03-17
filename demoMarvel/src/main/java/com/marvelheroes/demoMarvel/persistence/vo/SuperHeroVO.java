@@ -1,6 +1,5 @@
 package com.marvelheroes.demoMarvel.persistence.vo;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SuperHeroVO.
  */
